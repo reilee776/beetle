@@ -1,0 +1,1 @@
+cmd_/src/netand/src/nd_nix_nfm/kernel/nd_nix_nfm.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000 -T ./scripts/module-common.lds  --build-id  -o /src/netand/src/nd_nix_nfm/kernel/nd_nix_nfm.ko /src/netand/src/nd_nix_nfm/kernel/nd_nix_nfm.o /src/netand/src/nd_nix_nfm/kernel/nd_nix_nfm.mod.o ;  true

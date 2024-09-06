@@ -1,0 +1,21 @@
+MODULE_NAME := nd_nix_nfm
+
+obj-m += $(MODULE_NAME).o
+
+EXTRA_CFLAGS += -g
+
+# source file
+nd_nix_nfm-objs :=	nd_nix_nfm_main.o
+
+
+all:	$(MODULE_NAME).ko $(MODULE_NAME).sym
+
+$(MODULE_NAME).ko:
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+
+$(MODULE_NAME).sym: $(MODULE_NAME).ko
+	objcopy --only-keep-debug $(MODULE_NAME).ko $(MODULE_NAME).sym
+
+clean:
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+	rm -f $(MODULE_NAME).sym
