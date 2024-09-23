@@ -1,0 +1,43 @@
+# Makefile for building the kernel module
+
+# module name
+obj-m += nd_nix_nfm.o
+
+CFLAGS_nd_nix_nfm.o := -g
+
+# source file
+nd_nix_nfm-objs :=  nd_nix_nfm_main.o
+
+# Kernel source directory. It must be set to the location where the kernel headers are installed. 
+KDIR := /lib/modules/$(shell uname -r)/build
+
+# current directory
+PWD := $(shell pwd)
+
+# Add debug information
+EXTRA_CFLAGS += -g
+
+# defalut target
+all:
+	$(MAKE) -C $(KDIR) M=$(PWD) modules
+
+# clean target
+clean:
+	$(MAKE) -C $(KDIR) M=$(PWD) clean
+
+#build directory
+BUILDDIR = Build
+
+$(BUILDDIR) :
+	mkdir -p $(BUILDDIR)
+
+$(BUILDDIR)/nd_nix_nfm.ko : %(nd_nix_nfm-objs)
+	$(MAKE) -C $(KDIR) M=$(PWD) modules
+	mv nd_nix_nfm.ko $(BUILDDIR)/
+
+install : $(BUILDDIR)/nd_nix_nfm.ko
+	sudo insmod $(BUILDDIR)/nd_nix_nfm.ko
+
+uninstall :
+	sudo rmmod nd_nix_nfm
+
